@@ -1,0 +1,13 @@
+{
+ "name": "jenkins-aws-webapp",
+ "version": "1.0.0",
+ "description": "Demo web app for Jenkins CI/CD on AWS",
+ "main": "app.js",
+ "scripts": {
+ "start": "node app.js",
+ "test": "node --test"
+ },
+ "dependencies": {
+ "express": "^4.19.2"
+ }
+}
