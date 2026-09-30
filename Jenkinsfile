@@ -62,7 +62,7 @@ pipeline {
                                 tar -xzf /tmp/webapp.tar.gz -C ${APP_DIR} &&
                                 cd ${APP_DIR} &&
                                 npm install --omit=dev &&
-                                npm start
+                                npm start &
                             "
                     '''
                 }
