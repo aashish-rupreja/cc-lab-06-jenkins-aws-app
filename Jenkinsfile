@@ -39,28 +39,30 @@ pipeline {
         }
 
         stage('Deploy') {
-            withCredentials([
-                    sshUserPrivateKey(credentialsId: 'app-server-ssh', keyFileVariable: 'SSH_KEY', usernameVariable: 'DEPLOY_USER'),
-                    string(credentialsId: 'app-server-host', variable: 'DEPLOY_HOST')
-                ])
-                {
-                sh '''
-                    TARGET="${DEPLOY_USER}@${DEPLOY_HOST}"
+            steps {
+                withCredentials([
+                        sshUserPrivateKey(credentialsId: 'app-server-ssh', keyFileVariable: 'SSH_KEY', usernameVariable: 'DEPLOY_USER'),
+                        string(credentialsId: 'app-server-host', variable: 'DEPLOY_HOST')
+                    ])
+                    {
+                    sh '''
+                        TARGET="${DEPLOY_USER}@${DEPLOY_HOST}"
 
-                    scp -i "$SSH_KEY" \
-                        -o StrictHostKeyChecking=no \
-                        webapp-${BUILD_NUMBER}.tar.gz \
-                        "$TARGET:/tmp/webapp.tar.gz"
+                        scp -i "$SSH_KEY" \
+                            -o StrictHostKeyChecking=no \
+                            webapp-${BUILD_NUMBER}.tar.gz \
+                            "$TARGET:/tmp/webapp.tar.gz"
 
-                    ssh -i "$SSH_KEY" \
-                        -o StrictHostKeyChecking=no \
-                        "$TARGET" "
-                            tar -xzf /tmp/webapp.tar.gz -C ${APP_DIR} &&
-                            cd ${APP_DIR} &&
-                            npm install --omit=dev &&
-                            npm start
-                        "
-                '''
+                        ssh -i "$SSH_KEY" \
+                            -o StrictHostKeyChecking=no \
+                            "$TARGET" "
+                                tar -xzf /tmp/webapp.tar.gz -C ${APP_DIR} &&
+                                cd ${APP_DIR} &&
+                                npm install --omit=dev &&
+                                npm start
+                            "
+                    '''
+                }
             }
         }
 
