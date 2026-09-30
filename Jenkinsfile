@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        APP_DIR = '/opt/webapp'
+        APP_DIR = '/home/ec2-user'
         APP_PORT = '3000'
     }
     options {
