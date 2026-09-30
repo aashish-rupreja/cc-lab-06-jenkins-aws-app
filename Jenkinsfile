@@ -3,6 +3,7 @@ pipeline {
     environment {
         APP_DIR = '/home/ec2-user'
         APP_PORT = '3000'
+        DEPLOY_HOST = credentials('app-server-host')
     }
     options {
         timeout(time: 15, unit: 'MINUTES')
@@ -43,7 +44,6 @@ pipeline {
             steps {
                 withCredentials([
                         sshUserPrivateKey(credentialsId: 'app-server-ssh', keyFileVariable: 'SSH_KEY', usernameVariable: 'DEPLOY_USER'),
-                        string(credentialsId: 'app-server-host', variable: 'DEPLOY_HOST')
                     ])
                     {
                     sh '''
