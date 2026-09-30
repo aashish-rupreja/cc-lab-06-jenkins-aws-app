@@ -33,7 +33,8 @@ pipeline {
         }
         stage('Package') {
             steps {
-                sh "tar -czf webapp-${BUILD_NUMBER}.tar.gz --exclude='webapp-*.tar.gz' --exclude='node_modules' ."
+                sh "tar -czf /tmp/webapp-${BUILD_NUMBER}.tar.gz --exclude='webapp-*.tar.gz' --exclude='node_modules' ."
+                sh "cp /tmp/webapp-${BUILD_NUMBER}.tar.gz ."
                 archiveArtifacts artifacts: 'webapp-*.tar.gz', fingerprint: true
             }
         }
@@ -52,6 +53,8 @@ pipeline {
                             -o StrictHostKeyChecking=no \
                             webapp-${BUILD_NUMBER}.tar.gz \
                             "$TARGET:/tmp/webapp.tar.gz"
+
+                        rm webapp-${BUILD_NUMBER}.tar.gz
 
                         ssh -i "$SSH_KEY" \
                             -o StrictHostKeyChecking=no \
